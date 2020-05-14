@@ -1,16 +1,58 @@
 from rest_framework import serializers
 from .models import Department,Visit,VisitFor,Visitor
 from django.contrib.auth import get_user_model
+from rest_framework.serializers import CharField,EmailField
 
 User  = get_user_model()
 
-class UserCreateSerializer(serializers.ModelSerializer):
+class UserLoginSerializer(serializers.ModelSerializer):
+    token = CharField(allow_blank=True,read_only=True)
+    username = CharField()
+    email = EmailField(label="Email Address")
+
     class Meta:
         model = User
-        fields = ('username','email','password')
+        fields = (
+            'username',
+            'email',
+            'password',
+            'token',
+            )
         extra_kwargs = {
             'password':{'write_only':True}
         }
+
+class UserCreateSerializer(serializers.ModelSerializer):
+    password2 = CharField(write_only=True,required=True)
+    class Meta:
+        model = User
+        fields = ('username','email','password','password2')
+        extra_kwargs = {
+            'password':{'write_only':True},
+            # 'password2':{'write_only':True}
+        }
+
+    def validate(self,data):
+        email = data.get('email')
+        password = data.get('password')
+        password2 = data.get('password2')
+        user_qs = User.objects.filter(email=email)
+        if user_qs.exists():
+            raise serializers.ValidationError("Email is already registered")
+        if password != password2:
+            raise serializers.ValidationError("Password doesn't match with previous password")
+        return data
+
+
+    def create(self,validated_data):
+        username = validated_data.get('username')
+        email = validated_data.get('email')
+        password = validated_data.get('password')
+        user_obj = User(username=username,email=email)
+        user_obj.set_password(password)
+        user_obj.save()
+        print(validated_data)
+        return validated_data
 
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
