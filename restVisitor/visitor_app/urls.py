@@ -10,10 +10,12 @@ from .views import (
     VisitorListCreateView,
     VisitorRetrieveUpdateDeleteView,
     VisitForListCreateView,
-    VisitForRetrieveUpdateDeleteView
+    VisitForRetrieveUpdateDeleteView,
+    UserRegistrationView
 )
 
 urlpatterns = [
+    path('register/',UserRegistrationView.as_view(),name='register'),
     path('visits/',VisitListView.as_view(),name='visits'),
     path('visits/create',VisitCreateView.as_view(),name='visit-create'),
     path('visits/r/<int:pk>',VisitDetailView.as_view(),name='visit-detail'),

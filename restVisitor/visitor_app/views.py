@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from rest_framework import generics
+from django.contrib.auth import get_user_model
 from .models import Department,Visit,VisitFor,Visitor
 from .serializers import (
+UserCreateSerializer,
 DepartmentSerializer,
 VisitForSerializer,
 VisitorSerializer,
@@ -9,6 +11,12 @@ VisitCreateSerializer,
 VisitListSerializer)
 from rest_framework.filters import SearchFilter,OrderingFilter
 from .paginations import CustomPagination
+
+User = get_user_model()
+
+class UserRegistrationView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserCreateSerializer
 
 class VisitListView(generics.ListAPIView):
     queryset = Visit.objects.all()
