@@ -17,10 +17,26 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('v1/',include('visitor_app.urls')),
+    path('api/token/auth/', obtain_jwt_token),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+
+
+"""
+$ curl -X POST -d "username=pruthvi&password=pruthvi@1998" 'http://127.0.0.1:8000/api/token/auth/'
+
+
+curl -X POST -H "Content-Type: application/json" -d '{"username":"pruthvi","password":"pruthvi@1998"}' http://localhost:8000/api/token/auth/
+
+
+token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InBydXRodmkiLCJleHAiOjE1ODk0Njc3OTIsImVtYWlsIjoicHJ1dGh2aWJhcm90N0BnbWFpbC5jb20ifQ.r9RdMf6FW_m0ffEGyFhZ90DUzz7tZH2P144h8xeEKco
+
+curl -H "Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InBydXRodmkiLCJleHAiOjE1ODk0Njc3OTIsImVtYWlsIjoicHJ1dGh2aWJhcm90N0BnbWFpbC5jb20ifQ.r9RdMf6FW_m0ffEGyFhZ90DUzz7tZH2P144h8xeEKco" http://localhost:8000/v1/visits
+
+"""

@@ -4,13 +4,14 @@ from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
 from .models import Department,Visit,VisitFor,Visitor
 from .serializers import (
-UserCreateSerializer,
-UserLoginSerializer,
-DepartmentSerializer,
-VisitForSerializer,
-VisitorSerializer,
-VisitCreateSerializer,
-VisitListSerializer)
+    UserCreateSerializer,
+    UserLoginSerializer,
+    DepartmentSerializer,
+    VisitForSerializer,
+    VisitorSerializer,
+    VisitCreateSerializer,
+    VisitListSerializer
+    )
 from rest_framework.filters import SearchFilter,OrderingFilter
 from .paginations import CustomPagination
 from rest_framework.response import Response
@@ -37,11 +38,13 @@ class UserLoginView(APIView):
         return Response(serializer.errors,status=HTTP_400_BAD_REQUEST)
 
 class VisitListView(generics.ListAPIView):
-    queryset = Visit.objects.all()
+    queryset = Visit.objects.all().order_by('-id')
     serializer_class = VisitListSerializer
-    filter_backends = [SearchFilter]
+    filter_backends = [SearchFilter,OrderingFilter]
     search_fields = ['visitor_name__name','visit_to__name','purpose']
     pagination_class = CustomPagination
+    # ordering_fields = ['-id']
+    
 
 class VisitCreateView(generics.CreateAPIView):
     queryset = Visit.objects.all()

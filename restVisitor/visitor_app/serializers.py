@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db.models import Q
 from .models import Department,Visit,VisitFor,Visitor
 from django.contrib.auth import get_user_model
 from rest_framework.serializers import CharField,EmailField
@@ -7,8 +8,8 @@ User  = get_user_model()
 
 class UserLoginSerializer(serializers.ModelSerializer):
     token = CharField(allow_blank=True,read_only=True)
-    username = CharField()
-    email = EmailField(label="Email Address")
+    username = CharField(required=False,allow_blank=True)
+    email = EmailField(label="Email Address",required=False,allow_blank=True)
 
     class Meta:
         model = User
@@ -21,6 +22,30 @@ class UserLoginSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password':{'write_only':True}
         }
+    
+    def validate(self,data):
+        user_obj = None
+        username = data.get('username',None)
+        email = data.get('email',None)
+        password = data.get('password')
+
+        if not username and not email:
+            raise serializers.ValidationError("Username Or Email is Required")
+        user = User.objects.filter(
+            Q(email=email)|
+            Q(username=username)
+        ).distinct()
+        user = user.exclude(email__isnull=True).exclude(email__iexact='')
+        print(user.exists(),user.count())
+        if user.exists() and user.count() == 1:
+            user_obj = user.first()
+        else:
+            raise serializers.ValidationError("Username/Email Doesn't valid")
+        if user_obj:
+            if not user_obj.check_password(password):
+                raise serializers.ValidationError("Incorrect Password!")
+        data['token'] = "kankada515gdfd5gd5g1df5df5d48gs3g5fds"
+        return data
 
 class UserCreateSerializer(serializers.ModelSerializer):
     password2 = CharField(write_only=True,required=True)
@@ -81,11 +106,25 @@ class VisitListSerializer(serializers.ModelSerializer):
     visitor_name = VisitorSerializer(many=False)
     visit_to = VisitForSerializer(many=False)
     class Meta:
+        # ordering = ['-id']
         model = Visit
-        fields = ('id','visitor_name','visit_to','purpose','checkIn_time','checkOut_time')
+        fields = (
+            'id',
+            'visitor_name',
+            'visit_to',
+            'purpose',
+            'checkIn_time',
+            'checkOut_time'
+        )
 
 class VisitCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Visit
-        fields = ('visitor_name','visit_to','purpose','checkIn_time','checkOut_time')
+        fields = (
+            'visitor_name',
+            'visit_to',
+            'purpose',
+            'checkIn_time',
+            'checkOut_time'
+        )
         
