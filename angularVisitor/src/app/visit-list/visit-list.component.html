@@ -47,7 +47,7 @@
 </table>
 </div>
 
-<div class="modal fade" id="modalSubscriptionForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div #modal class="modal fade" id="modalSubscriptionForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -58,7 +58,7 @@
         </button>
       </div>
       <div class="modal-body mx-3">
-        <form #myform="ngForm" name="form" (ngSubmit)="myform.form.valid && onSubmit()">
+        <form #myform="ngForm" name="form" (ngSubmit)="myform.form.valid && onSubmit(modal)">
             <div class="form-group" *ngIf="visitors">
                 <label for="inputAddress">Visitor</label>
                 <select class="form-control" required [(ngModel)]='selectedVisitor' name="visitor">
@@ -97,7 +97,7 @@
                 <input type="text" required class="form-control" id="inputAdress" name="purpose" [(ngModel)]="purpose">
             </div>
             
-            <button type="submit" class="btn btn-primary">Sign in</button>
+            <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="myform.form.valid && onSubmit(myform)">Sign in</button>
           </form>
 
       </div>

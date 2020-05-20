@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { VisitorServiceService } from '../services/visitor-service.service';
+import { error } from 'protractor';
+import { RouterModule, Router } from '@angular/router';
 @Component({
   selector: 'app-visit-list',
   templateUrl: './visit-list.component.html',
@@ -29,13 +31,9 @@ export class VisitListComponent implements OnInit {
     name: null,
   };
   purpose: string;
-  visit: any = {
-    visitor_name: this.selectedVisitor.id,
-    visit_to: this.selectedEmp.id,
-    purpose: this.purpose
-  };
 
-  constructor(private service: VisitorServiceService) { }
+
+  constructor(private service: VisitorServiceService, private router: Router) { }
 
   ngOnInit(): void {
     this.getVisitData(this.baseUrl);
@@ -98,8 +96,33 @@ export class VisitListComponent implements OnInit {
     };
   }
 
-  onSubmit() {
-    alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.visit, null, 4));
+  onSubmit(modal) {
+    const visit = {
+      visitor_name: this.selectedVisitor.id,
+      visit_to: this.selectedEmp.id,
+      purpose: this.purpose
+    };
+    // alert('SUCCESS!! :-)\n\n' + JSON.stringify(visit, null, 4));
+    this.service.createVisit(`${this.baseUrl}/create`, visit).subscribe(response => {
+      console.log('Record Created',response);
+      // this.router.navigate(['/']);
+      console.log(modal);
+      modal.reset();
+      this.ngOnInit();
+      this.selectedVisitor = {
+        id: null,
+        name: null,
+        email: null,
+        phone: null,
+        address: null,
+        image: null,
+      };
+      // $('modalSubscriptionForm').hide();
+    },
+    // tslint:disable-next-line: no-shadowed-variable
+    error => {
+      console.log(error);
+    });
   }
 
 }

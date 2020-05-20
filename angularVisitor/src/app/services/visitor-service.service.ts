@@ -27,5 +27,9 @@ export class VisitorServiceService {
   getEmployeeList(url: string) {
     return this.http.get(url);
   }
+
+  createVisit(url: string , data: any) {
+    return this.http.post(url, data);
+  }
 }
 
