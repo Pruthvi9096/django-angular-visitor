@@ -115,19 +115,8 @@ export class VisitListComponent implements OnInit {
     // alert('SUCCESS!! :-)\n\n' + JSON.stringify(visit, null, 4));
     this.service.createVisit(`${this.baseUrl}/create`, visit).subscribe(response => {
       console.log('Record Created',response);
-      // this.router.navigate(['/']);
-      console.log(modal);
-      this.selectedVisitor = {
-        id: null,
-        name: null,
-        email: null,
-        phone: null,
-        address: null,
-        image: null,
-      };
+      // this.router.navigate(['/']); 
       this.ngOnInit();
-      // modal.reset();
-      // $('modalSubscriptionForm').hide();
     },
     // tslint:disable-next-line: no-shadowed-variable
     error => {
