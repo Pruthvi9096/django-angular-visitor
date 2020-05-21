@@ -14,6 +14,7 @@ export class VisitListComponent implements OnInit {
   employeeUrl = 'http://127.0.0.1:8000/v1/employees';
 
   result: any;
+  type: string;
   visitors: any;
   departments: any;
   employees: any;
@@ -40,12 +41,13 @@ export class VisitListComponent implements OnInit {
     this.getVisitorData(this.visitorUrl);
     this.getEmployeeData(this.employeeUrl);
     this.getDepartmentData(this.departmentUrl);
+    this.resetForm();
   }
 
   getVisitData(url) {
     this.service.getVisitList(url).subscribe( data => {
       this.result = data;
-      console.log(this.result.results);
+      console.log(this.result);
     },
     error => {
       console.log(error);
@@ -80,12 +82,13 @@ export class VisitListComponent implements OnInit {
     });
   }
 
-  createVisit() {
-    console.log('pop');
+  changeEvent(event) {
+    console.log(event.target.value);
+    this.type = event.target.value;
   }
 
-  resetForm(form) {
-    console.log(form);
+  resetForm() {
+    console.log();
     this.selectedVisitor = {
       id: null,
       name: null,
@@ -94,6 +97,13 @@ export class VisitListComponent implements OnInit {
       address: null,
       image: null,
     };
+    this.selectedEmp = {
+      id: null,
+      department: null,
+      name: null,
+    };
+    this.purpose = null;
+    this.type = null;
   }
 
   onSubmit(modal) {
@@ -107,8 +117,6 @@ export class VisitListComponent implements OnInit {
       console.log('Record Created',response);
       // this.router.navigate(['/']);
       console.log(modal);
-      modal.reset();
-      this.ngOnInit();
       this.selectedVisitor = {
         id: null,
         name: null,
@@ -117,6 +125,8 @@ export class VisitListComponent implements OnInit {
         address: null,
         image: null,
       };
+      this.ngOnInit();
+      // modal.reset();
       // $('modalSubscriptionForm').hide();
     },
     // tslint:disable-next-line: no-shadowed-variable
