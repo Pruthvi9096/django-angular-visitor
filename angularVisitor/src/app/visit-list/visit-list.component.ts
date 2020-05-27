@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { VisitorServiceService } from '../services/visitor-service.service';
-import { error } from 'protractor';
-import { RouterModule, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+
+
 @Component({
   selector: 'app-visit-list',
   templateUrl: './visit-list.component.html',
@@ -12,6 +15,10 @@ export class VisitListComponent implements OnInit {
   visitorUrl = 'http://127.0.0.1:8000/v1/visitors';
   departmentUrl = 'http://127.0.0.1:8000/v1/departments';
   employeeUrl = 'http://127.0.0.1:8000/v1/employees';
+
+  displayedColumns = ['visitor_name','emp','department','purpose','checkin','checkout'];
+  datasource = null;
+
 
   result: any;
   type: string;
@@ -32,12 +39,15 @@ export class VisitListComponent implements OnInit {
     name: null,
   };
   purpose: string;
-
+  pageEvent: PageEvent;
+  pageIndex = 1;
+  pageSize = 5;
+  length = 100;
 
   constructor(private service: VisitorServiceService, private router: Router) { }
-
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   ngOnInit(): void {
-    this.getVisitData(this.baseUrl);
+    this.getVisitData(`${this.baseUrl}/?page=${this.pageIndex + 1}`);
     this.getVisitorData(this.visitorUrl);
     this.getEmployeeData(this.employeeUrl);
     this.getDepartmentData(this.departmentUrl);
@@ -48,6 +58,12 @@ export class VisitListComponent implements OnInit {
     this.service.getVisitList(url).subscribe( data => {
       this.result = data;
       console.log(this.result);
+      this.datasource = new MatTableDataSource(this.result.results);
+      setTimeout(() => {
+        this.datasource.paginator = this.paginator;
+        this.datasource.pageSize = this.pageSize;
+        this.datasource.pageIndex = this.pageIndex;
+      });
     },
     error => {
       console.log(error);
@@ -57,7 +73,6 @@ export class VisitListComponent implements OnInit {
   getVisitorData(url) {
     this.service.getVisitorList(url).subscribe( data => {
       this.visitors = data;
-      console.log(this.visitors);
     },
     error => {
       console.log(error);
@@ -83,12 +98,10 @@ export class VisitListComponent implements OnInit {
   }
 
   changeEvent(event) {
-    console.log(event.target.value);
     this.type = event.target.value;
   }
 
   resetForm() {
-    console.log();
     this.selectedVisitor = {
       id: null,
       name: null,
@@ -122,6 +135,14 @@ export class VisitListComponent implements OnInit {
     error => {
       console.log(error);
     });
+  }
+
+  getServerData(event) {
+    console.log(event);
+    this.pageIndex = event.pageIndex;
+    this.length = event.length;
+    this.pageSize = event.pageSize;
+    this.getVisitData(`${this.baseUrl}/?page=${this.pageIndex + 1}`)
   }
 
 }

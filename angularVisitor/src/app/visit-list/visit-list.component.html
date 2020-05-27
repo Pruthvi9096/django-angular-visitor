@@ -1,62 +1,81 @@
 <div *ngIf='result'>
     <h3>Visits</h3>
-    <div class="text-center">
-        <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalSubscriptionForm">Launch
-          Modal Subscription Form</a>
-      </div>
-    <table class="table">
-        <thead class="thead-dark">
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Visit To</th>
-                <th>Purpose</th>
-                <th>CheckIn</th>
-                <th>CheckOut</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor='let row of result.results'>
-                <td>{{row.id}}</td>
-                <td>
-                    <span *ngIf='row.visitor_name'>{{row.visitor_name.name}}</span>
-                    <span *ngIf='!row.visitor_name'>-</span>
-                </td>
-                <td>
-                    <span *ngIf='row.visit_to'>{{row.visit_to.name}}</span>
-                    <span *ngIf='!row.visit_to'>-</span>
-                </td>
-                <td>
-                    <span *ngIf="row.purpose">{{row.purpose}}</span>
-                    <span *ngIf='!row.purpose'>-</span>
-                </td>
-                <td>
-                    <span *ngIf='row.checkIn_time'>{{row.checkIn_time}}</span>
-                    <span *ngIf='!row.checkIn_time'>
-                        <button class="btn btn-primary">Check In</button>
-                    </span>
-                </td>
-                <td>
-                    <span *ngIf='row.checkOut_time'>{{row.checkOut_time}}</span>
-                    <span *ngIf='!row.checkOut_time'>
-                        <button class="btn btn-primary">Check In</button>
-                    </span>
-                </td>
-            </tr>
-        </tbody>
-</table>
+    <!-- <md-paginator #paginator
+                [length]="length"
+                [pageIndex]="pageIndex"
+                [pageSize]="pageSize"
+                [pageSizeOptions]="[5, 10, 25, 100]"
+                (page)="pageEvent = getServerData($event)"
+                >
+ </md-paginator> -->
+ <button mat-fab ></button>
+ <mat-paginator [pageSizeOptions]="[5, 10, 15]"  (page)="getServerData($event)"></mat-paginator>
+    <mat-table #table [dataSource]="datasource">
+
+      <ng-container matColumnDef="visitor_name">
+        <mat-header-cell *matHeaderCellDef>Name </mat-header-cell>
+        <mat-cell *matCellDef="let visit">{{visit.visitor_name.name}}  </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="emp">
+        <mat-header-cell *matHeaderCellDef>Visit To</mat-header-cell>
+        <mat-cell *matCellDef="let visit">{{visit.visit_to.name}}</mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="department">
+        <mat-header-cell *matHeaderCellDef>Department</mat-header-cell>
+        <mat-cell *matCellDef="let visit">{{visit.department}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="purpose">
+        <mat-header-cell *matHeaderCellDef>Purpose</mat-header-cell>
+        <mat-cell *matCellDef="let visit">{{visit.purpose}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="checkin">
+        <mat-header-cell *matHeaderCellDef>Check-In</mat-header-cell>
+        <mat-cell *matCellDef="let visit">
+          <span *ngIf="visit.checkIn">{{visit.chekIn}}</span>
+          <span *ngIf="!visit.checkIn">
+            <button mat-raised-button color="accent">Check-In</button>
+          </span>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="checkout">
+        <mat-header-cell *matHeaderCellDef>Check-Out</mat-header-cell>
+        <mat-cell *matCellDef="let visit">
+          <span *ngIf="visit.checkIn">{{visit.chekOut}}</span>
+          <span *ngIf="!visit.checkIn && visit.checkIn">
+            <button mat-raised-button color="warn">Check-Out</button>
+          </span>
+        </mat-cell>
+      </ng-container>
+  
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    
 </div>
 
 <div #modal class="modal fade" id="modalSubscriptionForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
+    <div class="modal-content form-style-2">
+      <div class="modal-header text-center form-style-2-heading">
         <h4 class="modal-title w-100 font-weight-bold">Subscribe</h4>
         <button type="button" class="close" (click)="resetForm()" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <mat-form-field>
+        <mat-label>Select an option</mat-label>
+        <mat-select disableRipple>
+          <mat-option value="1">Option 1</mat-option>
+          <mat-option value="2">Option 2</mat-option>
+          <mat-option value="3">Option 3</mat-option>
+        </mat-select>
+      </mat-form-field>
       <div class="modal-body mx-3">
         <div class="form-group" *ngIf="!type">
         <label for="type">Type</label>

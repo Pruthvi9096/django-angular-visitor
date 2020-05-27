@@ -59,7 +59,7 @@ class VisitUpdateDeleteView(generics.UpdateAPIView,generics.DestroyAPIView):
     serializer_class = VisitCreateSerializer
 
 class DepartmentListCreateView(generics.ListCreateAPIView):
-    queryset = Department.objects.all()
+    queryset = Department.objects.all().order_by('id')
     serializer_class = DepartmentSerializer
     filter_backends = [SearchFilter]
     search_fields = ['department_name']
@@ -71,7 +71,7 @@ class DepartmentRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DepartmentSerializer
 
 class VisitorListCreateView(generics.ListCreateAPIView):
-    queryset = Visitor.objects.all()
+    queryset = Visitor.objects.all().order_by('id')
     serializer_class = VisitorSerializer
     filter_backends = [SearchFilter]
     search_fields = ['name','email','phone','address']
@@ -83,7 +83,7 @@ class VisitorRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = VisitorSerializer
 
 class VisitForListCreateView(generics.ListCreateAPIView):
-    queryset = VisitFor.objects.all()
+    queryset = VisitFor.objects.all().order_by('id')
     serializer_class = VisitForSerializer
     filter_backends = [SearchFilter]
     search_fields = ['name','department__department_name']

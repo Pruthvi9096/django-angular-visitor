@@ -105,12 +105,14 @@ class VisitorSerializer(serializers.ModelSerializer):
 class VisitListSerializer(serializers.ModelSerializer):
     visitor_name = VisitorSerializer(many=False)
     visit_to = VisitForSerializer(many=False)
+    department = serializers.CharField(source='visit_to.department.department_name')
     class Meta:
         # ordering = ['-id']
         model = Visit
         fields = (
             'id',
             'visitor_name',
+            'department',
             'visit_to',
             'purpose',
             'checkIn_time',
