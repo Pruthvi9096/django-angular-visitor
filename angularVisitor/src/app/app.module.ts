@@ -7,8 +7,9 @@ import { AppComponent } from './app.component';
 import { VisitListComponent } from './visit-list/visit-list.component';
 import { from } from 'rxjs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatPaginatorModule} from '@angular/material/paginator'
+import {MatPaginatorModule} from '@angular/material/paginator';
 import { MaterialModule } from './material/material.module';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { MaterialModule } from './material/material.module';
     BrowserAnimationsModule,
     MaterialModule,
     ReactiveFormsModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatIconModule,
 
   ],
   providers: [],

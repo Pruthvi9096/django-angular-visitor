@@ -40,7 +40,7 @@ export class VisitListComponent implements OnInit {
   };
   purpose: string;
   pageEvent: PageEvent;
-  pageIndex = 1;
+  pageIndex = 0;
   pageSize = 5;
   length = 100;
 
@@ -137,12 +137,11 @@ export class VisitListComponent implements OnInit {
     });
   }
 
-  getServerData(event) {
-    console.log(event);
-    this.pageIndex = event.pageIndex;
-    this.length = event.length;
-    this.pageSize = event.pageSize;
-    this.getVisitData(`${this.baseUrl}/?page=${this.pageIndex + 1}`)
+  getNextPageData(nextPage) {
+    console.log(nextPage);
+    this.getVisitData(nextPage);
   }
-
+  getPreviousPageData(previousPage){
+    this.getVisitData(previousPage);
+  }
 }
