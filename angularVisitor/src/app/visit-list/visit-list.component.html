@@ -27,6 +27,10 @@
 
   <mat-table #table [dataSource]="datasource" *ngIf="result.results">
 
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef>Id </mat-header-cell>
+      <mat-cell *matCellDef="let visit">{{visit.id}}</mat-cell>
+    </ng-container>
     <ng-container matColumnDef="visitor_name">
       <mat-header-cell *matHeaderCellDef>Name </mat-header-cell>
       <mat-cell *matCellDef="let visit">{{visit.visitor_name.name}}</mat-cell>
@@ -50,9 +54,9 @@
     <ng-container matColumnDef="checkin">
       <mat-header-cell *matHeaderCellDef>Check-In</mat-header-cell>
       <mat-cell *matCellDef="let visit">
-        <span *ngIf="visit.checkIn">{{visit.chekIn}}</span>
-        <span *ngIf="!visit.checkIn">
-    <button mat-raised-button color="accent" (click)="checkIn(visit)">Check-In</button>
+        <span *ngIf="visit.checkIn_time">{{visit.checkIn_time | date:'short'}}</span>
+        <span *ngIf="!visit.checkIn_time">
+    <button mat-raised-button color="accent" (click)="updateCheckInCheckOut(visit,'checkin')">Check-In</button>
         </span>
       </mat-cell>
     </ng-container>
@@ -60,9 +64,9 @@
     <ng-container matColumnDef="checkout">
       <mat-header-cell *matHeaderCellDef>Check-Out</mat-header-cell>
       <mat-cell *matCellDef="let visit">
-        <span *ngIf="visit.checkIn">{{visit.chekOut}}</span>
-        <span *ngIf="!visit.checkIn && visit.checkIn">
-          <button mat-raised-button color="warn">Check-Out</button>
+        <span *ngIf="visit.checkOut_time">{{visit.checkOut_time | date:'short'}}</span>
+        <span *ngIf="!visit.checkOut_time && visit.checkIn_time">
+          <button mat-raised-button color="warn" (click)="updateCheckInCheckOut(visit,'checkout')">Check-Out</button>
         </span>
       </mat-cell>
     </ng-container>

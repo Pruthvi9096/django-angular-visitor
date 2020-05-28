@@ -16,7 +16,7 @@ export class VisitListComponent implements OnInit {
   departmentUrl = 'http://127.0.0.1:8000/v1/departments';
   employeeUrl = 'http://127.0.0.1:8000/v1/employees';
 
-  displayedColumns = ['visitor_name', 'emp', 'department', 'purpose', 'checkin', 'checkout'];
+  displayedColumns = ['id','visitor_name', 'emp', 'department', 'purpose', 'checkin', 'checkout'];
   datasource = null;
 
 
@@ -170,13 +170,25 @@ export class VisitListComponent implements OnInit {
 
   }
 
-  checkIn(visit) {
+  updateCheckInCheckOut(visit,type) {
     console.log(visit);
     const date = new Date().toISOString();
-    visit.checkIn = date;
-    console.log(visit)
-    this.service.updateVisit(`${this.baseUrl}/${visit.id}`, visit).subscribe(respose =>{
-      console.log(respose);
+    if (type === 'checkin') {
+      visit.checkIn_time = date;
+    }
+    if (type === 'checkout') {
+      visit.checkOut_time = date;
+    }
+    const data = {id: visit.id,
+      visitor_name: visit.visitor_name.id,
+      visit_to: visit.visit_to.id,
+      purpose: visit.purpose,
+      checkIn_time: visit.checkIn_time,
+      checkOut_time: visit.checkOut_time
+    };
+    console.log(visit);
+    this.service.updateVisit(`${this.baseUrl}/${visit.id}`, data).subscribe(respose =>{
+      console.log('updated');
     },
     error => {
       console.log(error);

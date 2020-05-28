@@ -54,7 +54,7 @@ class VisitDetailView(generics.RetrieveAPIView):
     queryset = Visit.objects.all()
     serializer_class = VisitListSerializer
 
-class VisitUpdateDeleteView(generics.UpdateAPIView,generics.DestroyAPIView):
+class VisitUpdateDeleteView(generics.UpdateAPIView,generics.DestroyAPIView,generics.RetrieveAPIView):
     queryset = Visit.objects.all()
     serializer_class = VisitCreateSerializer
 
