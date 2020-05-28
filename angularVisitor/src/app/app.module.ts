@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { MaterialModule } from './material/material.module';
 import { MatIconModule } from '@angular/material/icon';
+// import { MatFilterModule } from '@angular/material/'
 
 @NgModule({
   declarations: [

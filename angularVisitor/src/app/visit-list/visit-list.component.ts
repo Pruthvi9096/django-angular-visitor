@@ -16,7 +16,7 @@ export class VisitListComponent implements OnInit {
   departmentUrl = 'http://127.0.0.1:8000/v1/departments';
   employeeUrl = 'http://127.0.0.1:8000/v1/employees';
 
-  displayedColumns = ['visitor_name','emp','department','purpose','checkin','checkout'];
+  displayedColumns = ['visitor_name', 'emp', 'department', 'purpose', 'checkin', 'checkout'];
   datasource = null;
 
 
@@ -55,11 +55,11 @@ export class VisitListComponent implements OnInit {
     this.resetForm();
     this.datasource.filterPredicate = (data: any, filter: string) => {
       return data.visitor_name.name == filter;
-     };
+    };
   }
 
   getVisitData(url) {
-    this.service.getVisitList(url).subscribe( data => {
+    this.service.getVisitList(url).subscribe(data => {
       this.result = data;
       console.log(this.result);
       this.datasource = new MatTableDataSource(this.result.results);
@@ -72,36 +72,36 @@ export class VisitListComponent implements OnInit {
       //   element.toString();
       // });
     },
-    error => {
-      console.log(error);
-    });
+      error => {
+        console.log(error);
+      });
   }
 
   getVisitorData(url) {
-    this.service.getVisitorList(url).subscribe( data => {
+    this.service.getVisitorList(url).subscribe(data => {
       this.visitors = data;
     },
-    error => {
-      console.log(error);
-    });
+      error => {
+        console.log(error);
+      });
   }
 
   getDepartmentData(url) {
-    this.service.getDepartmentList(url).subscribe( data => {
+    this.service.getDepartmentList(url).subscribe(data => {
       this.departments = data;
     },
-    error => {
-      console.log(error);
-    });
+      error => {
+        console.log(error);
+      });
   }
 
   getEmployeeData(url) {
-    this.service.getEmployeeList(url).subscribe( data => {
+    this.service.getEmployeeList(url).subscribe(data => {
       this.employees = data;
     },
-    error => {
-      console.log(error);
-    });
+      error => {
+        console.log(error);
+      });
   }
 
   changeEvent(event) {
@@ -134,28 +134,31 @@ export class VisitListComponent implements OnInit {
     };
     // alert('SUCCESS!! :-)\n\n' + JSON.stringify(visit, null, 4));
     this.service.createVisit(`${this.baseUrl}/create`, visit).subscribe(response => {
-      console.log('Record Created',response);
+      console.log('Record Created', response);
       // this.router.navigate(['/']); 
       this.ngOnInit();
     },
-    // tslint:disable-next-line: no-shadowed-variable
-    error => {
-      console.log(error);
-    });
+      // tslint:disable-next-line: no-shadowed-variable
+      error => {
+        console.log(error);
+      });
   }
 
   getNextPageData(nextPage) {
     console.log(nextPage);
     this.getVisitData(nextPage);
   }
-  getPreviousPageData(previousPage){
+
+  getPreviousPageData(previousPage) {
     this.getVisitData(previousPage);
   }
+
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
     this.datasource.filter = filterValue;
   }
+
   setupFilter() {
 
     this.datasource.filterPredicate = (d: any, filter: string) => {
@@ -163,7 +166,8 @@ export class VisitListComponent implements OnInit {
         visitor_name: d.visitor_name.name.toLowerCase(),
         visit_to: d.visit_to.name.toLowerCase(),
         department: d.department.toLowerCase(),
-        purpose: d.purpose.toLowerCase()});
+        purpose: d.purpose.toLowerCase()
+      });
       return textToSearch.indexOf(filter) !== -1;
     };
 

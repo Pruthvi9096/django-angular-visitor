@@ -1,79 +1,76 @@
 <div *ngIf='result'>
-    <h3>Visits</h3>
-    <!-- <md-paginator #paginator
-                [length]="length"
-                [pageIndex]="pageIndex"
-                [pageSize]="pageSize"
-                [pageSizeOptions]="[5, 10, 25, 100]"
-                (page)="pageEvent = getServerData($event)"
-                >
- </md-paginator> -->
- <div class="row">
-   <div class="col-md-4">
-     <mat-form-field class="ml-3"> 
-       <input matInput (keyup)="applyFilter($event.target.value)" (focus)="setupFilter()" placeholder="Filter">
+  <h3>Visits</h3>
+  <div class="row">
+    <div class="col-md-4">
+      <button mat-fab data-toggle="modal" data-target="#modalSubscriptionForm">
+        <mat-icon>add_circle_outline</mat-icon>
+      </button>
+      <mat-form-field class="ml-3">
+        <input matInput (keyup)="applyFilter($event.target.value)" (focus)="setupFilter()" placeholder="Filter">
       </mat-form-field>
     </div>
     <div class="col-md-3">
-      <button *ngIf="result.previous" mat-fab class="mx-2" color="primary" (click)="getPreviousPageData(result.previous)" aria-label="Example icon button with a delete icon">
+      <button *ngIf="result.previous" mat-fab class="mx-2" color="primary"
+        (click)="getPreviousPageData(result.previous)" aria-label="Example icon button with a delete icon">
         <mat-icon>arrow_back_ios</mat-icon>
       </button>
-      <button *ngIf="result.next" mat-fab class="mx-2" color="primary" (click)="getNextPageData(result.next)" aria-label="Example icon button with a delete icon">
+      <button *ngIf="result.next" mat-fab class="mx-2" color="primary" (click)="getNextPageData(result.next)"
+        aria-label="Example icon button with a delete icon">
         <mat-icon>arrow_forward_ios</mat-icon>
       </button>
-   </div>
-   <div class="col-md-5">
-     <mat-paginator [pageSizeOptions]="[5, 10, 15]">
-    </mat-paginator>
-   </div>
- </div>
+    </div>
+    <div class="col-md-5">
+      <mat-paginator [pageSizeOptions]="[5, 10, 15]">
+      </mat-paginator>
+    </div>
+  </div>
 
-    <mat-table #table [dataSource]="datasource" *ngIf="result.results">
+  <mat-table #table [dataSource]="datasource" *ngIf="result.results">
 
-      <ng-container matColumnDef="visitor_name">
-        <mat-header-cell *matHeaderCellDef>Name </mat-header-cell>
-        <mat-cell *matCellDef="let visit">{{visit.visitor_name.name}}</mat-cell>
-      </ng-container>
-  
-      <ng-container matColumnDef="emp">
-        <mat-header-cell *matHeaderCellDef>Visit To</mat-header-cell>
-        <mat-cell *matCellDef="let visit">{{visit.visit_to.name}}</mat-cell>
-      </ng-container>
-  
-      <ng-container matColumnDef="department">
-        <mat-header-cell *matHeaderCellDef>Department</mat-header-cell>
-        <mat-cell *matCellDef="let visit">{{visit.department}}</mat-cell>
-      </ng-container>
+    <ng-container matColumnDef="visitor_name">
+      <mat-header-cell *matHeaderCellDef>Name </mat-header-cell>
+      <mat-cell *matCellDef="let visit">{{visit.visitor_name.name}}</mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="purpose">
-        <mat-header-cell *matHeaderCellDef>Purpose</mat-header-cell>
-        <mat-cell *matCellDef="let visit">{{visit.purpose}}</mat-cell>
-      </ng-container>
+    <ng-container matColumnDef="emp">
+      <mat-header-cell *matHeaderCellDef>Visit To</mat-header-cell>
+      <mat-cell *matCellDef="let visit">{{visit.visit_to.name}}</mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="checkin">
-        <mat-header-cell *matHeaderCellDef>Check-In</mat-header-cell>
-        <mat-cell *matCellDef="let visit">
-          <span *ngIf="visit.checkIn">{{visit.chekIn}}</span>
-          <span *ngIf="!visit.checkIn">
-            <button mat-raised-button color="accent">Check-In</button>
-          </span>
-        </mat-cell>
-      </ng-container>
+    <ng-container matColumnDef="department">
+      <mat-header-cell *matHeaderCellDef>Department</mat-header-cell>
+      <mat-cell *matCellDef="let visit">{{visit.department}}</mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="checkout">
-        <mat-header-cell *matHeaderCellDef>Check-Out</mat-header-cell>
-        <mat-cell *matCellDef="let visit">
-          <span *ngIf="visit.checkIn">{{visit.chekOut}}</span>
-          <span *ngIf="!visit.checkIn && visit.checkIn">
-            <button mat-raised-button color="warn">Check-Out</button>
-          </span>
-        </mat-cell>
-      </ng-container>
-  
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    </mat-table>
-    
+    <ng-container matColumnDef="purpose">
+      <mat-header-cell *matHeaderCellDef>Purpose</mat-header-cell>
+      <mat-cell *matCellDef="let visit">{{visit.purpose}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="checkin">
+      <mat-header-cell *matHeaderCellDef>Check-In</mat-header-cell>
+      <mat-cell *matCellDef="let visit">
+        <span *ngIf="visit.checkIn">{{visit.chekIn}}</span>
+        <span *ngIf="!visit.checkIn">
+          <button mat-raised-button color="accent">Check-In</button>
+        </span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="checkout">
+      <mat-header-cell *matHeaderCellDef>Check-Out</mat-header-cell>
+      <mat-cell *matCellDef="let visit">
+        <span *ngIf="visit.checkIn">{{visit.chekOut}}</span>
+        <span *ngIf="!visit.checkIn && visit.checkIn">
+          <button mat-raised-button color="warn">Check-Out</button>
+        </span>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
 </div>
 
 <div #modal class="modal fade" id="modalSubscriptionForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -81,69 +78,230 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content form-style-2">
       <div class="modal-header text-center form-style-2-heading">
-        <h4 class="modal-title w-100 font-weight-bold">Subscribe</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Create Visit</h4>
         <button type="button" class="close" (click)="resetForm()" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <mat-form-field>
+      <!-- <mat-form-field>
         <mat-label>Select an option</mat-label>
         <mat-select disableRipple>
           <mat-option value="1">Option 1</mat-option>
           <mat-option value="2">Option 2</mat-option>
           <mat-option value="3">Option 3</mat-option>
         </mat-select>
-      </mat-form-field>
+      </mat-form-field> -->
       <div class="modal-body mx-3">
         <div class="form-group" *ngIf="!type">
-        <label for="type">Type</label>
-        <select id="type" (change)="changeEvent($event)" class="form-control">
-          <option value="new">New</option>
-          <option value="existing">Existing</option>
-        </select>
-      </div>
+          <label for="type">Type</label>
+          <select id="type" (change)="changeEvent($event)" class="form-control">
+            <option value="new">New</option>
+            <option value="existing">Existing</option>
+          </select>
+        </div>
         <div *ngIf="type=='existing'">
-        <form #myform="ngForm" name="form" (ngSubmit)="myform.form.valid && onSubmit(modal)">
+          <form #myform="ngForm" name="form" (ngSubmit)="myform.form.valid && onSubmit(modal)">
             <div class="form-group" *ngIf="visitors">
-                <label for="inputAddress">Visitor</label>
-                <!-- <input list="brow" class="form-control"> -->
-                <select class="form-control" onmousedown="if(this.options.length>8){this.size=8;}"  onchange='this.size=0;' onblur="this.size=0;" required [(ngModel)]='selectedVisitor' name="visitor">
-                    <option *ngFor="let c of visitors.results" [ngValue]="c">{{c.name}}</option>
-                </select>
-              </div>
+              <label for="inputAddress">Visitor</label>
+              <!-- <input list="brow" class="form-control"> -->
+              <select class="form-control" onmousedown="if(this.options.length>8){this.size=8;}" onchange='this.size=0;'
+                onblur="this.size=0;" required [(ngModel)]='selectedVisitor' name="visitor">
+                <option *ngFor="let c of visitors.results" [ngValue]="c">{{c.name}}</option>
+              </select>
+            </div>
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label for="inputEmail4">Email</label>
-                <input type="email" disabled class="form-control" id="inputEmail4" name="visitor_email" placeholder="Email" [(ngModel)]="selectedVisitor.email">
+                <input type="email" disabled class="form-control" id="inputEmail4" name="visitor_email"
+                  placeholder="Email" [(ngModel)]="selectedVisitor.email">
               </div>
               <div class="form-group col-md-6">
                 <label for="inputPassword4">Phone</label>
-                <input type="text" disabled class="form-control" id="inputPassword4" name="visitor_phone" [(ngModel)]="selectedVisitor.phone" placeholder="Password">
+                <input type="text" disabled class="form-control" id="inputPassword4" name="visitor_phone"
+                  [(ngModel)]="selectedVisitor.phone" placeholder="Password">
               </div>
             </div>
-            
+
             <div class="form-group">
               <label for="inputAddress">Address</label>
-              <input type="text" disabled class="form-control" id="inputAdress" name="visitor_adress" [(ngModel)]="selectedVisitor.address" placeholder="Password">
+              <input type="text" disabled class="form-control" id="inputAdress" name="visitor_adress"
+                [(ngModel)]="selectedVisitor.address" placeholder="Password">
             </div>
             <div class="form-group" *ngIf='employees'>
-                <label for="inputAddress">Visit To</label>
-                <select class="form-control" required [(ngModel)]='selectedEmp' name="employee">
-                    <option *ngFor="let c of employees.results" [ngValue]="c">{{c.name}}</option>
-                </select>
+              <label for="inputAddress">Visit To</label>
+              <select class="form-control" required [(ngModel)]='selectedEmp' name="employee">
+                <option *ngFor="let c of employees.results" [ngValue]="c">{{c.name}}</option>
+              </select><div *ngIf='result'>
+                <h3>Visits</h3>
+                <div class="row">
+                  <div class="col-md-4">
+                    <button mat-fab data-toggle="modal" data-target="#modalSubscriptionForm">
+                      <mat-icon>add_circle_outline</mat-icon>
+                    </button>
+                    <mat-form-field class="ml-3">
+                      <input matInput (keyup)="applyFilter($event.target.value)" (focus)="setupFilter()" placeholder="Filter">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3">
+                    <button *ngIf="result.previous" mat-fab class="mx-2" color="primary"
+                      (click)="getPreviousPageData(result.previous)" aria-label="Example icon button with a delete icon">
+                      <mat-icon>arrow_back_ios</mat-icon>
+                    </button>
+                    <button *ngIf="result.next" mat-fab class="mx-2" color="primary" (click)="getNextPageData(result.next)"
+                      aria-label="Example icon button with a delete icon">
+                      <mat-icon>arrow_forward_ios</mat-icon>
+                    </button>
+                  </div>
+                  <div class="col-md-5">
+                    <mat-paginator [pageSizeOptions]="[5, 10, 15]">
+                    </mat-paginator>
+                  </div>
+                </div>
+              
+                <mat-table #table [dataSource]="datasource" *ngIf="result.results">
+              
+                  <ng-container matColumnDef="visitor_name">
+                    <mat-header-cell *matHeaderCellDef>Name </mat-header-cell>
+                    <mat-cell *matCellDef="let visit">{{visit.visitor_name.name}}</mat-cell>
+                  </ng-container>
+              
+                  <ng-container matColumnDef="emp">
+                    <mat-header-cell *matHeaderCellDef>Visit To</mat-header-cell>
+                    <mat-cell *matCellDef="let visit">{{visit.visit_to.name}}</mat-cell>
+                  </ng-container>
+              
+                  <ng-container matColumnDef="department">
+                    <mat-header-cell *matHeaderCellDef>Department</mat-header-cell>
+                    <mat-cell *matCellDef="let visit">{{visit.department}}</mat-cell>
+                  </ng-container>
+              
+                  <ng-container matColumnDef="purpose">
+                    <mat-header-cell *matHeaderCellDef>Purpose</mat-header-cell>
+                    <mat-cell *matCellDef="let visit">{{visit.purpose}}</mat-cell>
+                  </ng-container>
+              
+                  <ng-container matColumnDef="checkin">
+                    <mat-header-cell *matHeaderCellDef>Check-In</mat-header-cell>
+                    <mat-cell *matCellDef="let visit">
+                      <span *ngIf="visit.checkIn">{{visit.chekIn}}</span>
+                      <span *ngIf="!visit.checkIn">
+                        <button mat-raised-button color="accent">Check-In</button>
+                      </span>
+                    </mat-cell>
+                  </ng-container>
+              
+                  <ng-container matColumnDef="checkout">
+                    <mat-header-cell *matHeaderCellDef>Check-Out</mat-header-cell>
+                    <mat-cell *matCellDef="let visit">
+                      <span *ngIf="visit.checkIn">{{visit.chekOut}}</span>
+                      <span *ngIf="!visit.checkIn && visit.checkIn">
+                        <button mat-raised-button color="warn">Check-Out</button>
+                      </span>
+                    </mat-cell>
+                  </ng-container>
+              
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+              
+              </div>
+              
+              <div #modal class="modal fade" id="modalSubscriptionForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content form-style-2">
+                    <div class="modal-header text-center form-style-2-heading">
+                      <h4 class="modal-title w-100 font-weight-bold">Create Visit</h4>
+                      <button type="button" class="close" (click)="resetForm()" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <!-- <mat-form-field>
+                      <mat-label>Select an option</mat-label>
+                      <mat-select disableRipple>
+                        <mat-option value="1">Option 1</mat-option>
+                        <mat-option value="2">Option 2</mat-option>
+                        <mat-option value="3">Option 3</mat-option>
+                      </mat-select>
+                    </mat-form-field> -->
+                    <div class="modal-body mx-3">
+                      <div class="form-group" *ngIf="!type">
+                        <label for="type">Type</label>
+                        <select id="type" (change)="changeEvent($event)" class="form-control">
+                          <option value="new">New</option>
+                          <option value="existing">Existing</option>
+                        </select>
+                      </div>
+                      <div *ngIf="type=='existing'">
+                        <form #myform="ngForm" name="form" (ngSubmit)="myform.form.valid && onSubmit(modal)">
+                          <div class="form-group" *ngIf="visitors">
+                            <label for="inputAddress">Visitor</label>
+                            <!-- <input list="brow" class="form-control"> -->
+                            <select class="form-control" onmousedown="if(this.options.length>8){this.size=8;}" onchange='this.size=0;'
+                              onblur="this.size=0;" required [(ngModel)]='selectedVisitor' name="visitor">
+                              <option *ngFor="let c of visitors.results" [ngValue]="c">{{c.name}}</option>
+                            </select>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-md-6">
+                              <label for="inputEmail4">Email</label>
+                              <input type="email" disabled class="form-control" id="inputEmail4" name="visitor_email"
+                                placeholder="Email" [(ngModel)]="selectedVisitor.email">
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label for="inputPassword4">Phone</label>
+                              <input type="text" disabled class="form-control" id="inputPassword4" name="visitor_phone"
+                                [(ngModel)]="selectedVisitor.phone" placeholder="Password">
+                            </div>
+                          </div>
+              
+                          <div class="form-group">
+                            <label for="inputAddress">Address</label>
+                            <input type="text" disabled class="form-control" id="inputAdress" name="visitor_adress"
+                              [(ngModel)]="selectedVisitor.address" placeholder="Password">
+                          </div>
+                          <div class="form-group" *ngIf='employees'>
+                            <label for="inputAddress">Visit To</label>
+                            <select class="form-control" required [(ngModel)]='selectedEmp' name="employee">
+                              <option *ngFor="let c of employees.results" [ngValue]="c">{{c.name}}</option>
+                            </select>
+                          </div>
+                          <div class="form-group" *ngIf='departments && selectedEmp'>
+                            <label for="inputAddress">Department</label>
+                            <select class="form-control" disabled [(ngModel)]='selectedEmp.department' name="department">
+                              <option *ngFor="let c of departments.results" [ngValue]="c.id">{{c.department_name}}</option>
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="inputAddress">Purpose</label>
+                            <input type="text" required class="form-control" id="inputAdress" name="purpose" [(ngModel)]="purpose">
+                          </div>
+              
+                          <button type="submit" class="btn btn-primary" data-dismiss="modal"
+                            (click)="myform.form.valid && onSubmit(myform)">Create</button>
+                        </form>
+                      </div>
+                    </div>
+                    <!-- <div class="modal-footer d-flex justify-content-center">
+                      <button class="btn btn-indigo">Send <i class="fas fa-paper-plane-o ml-1"></i></button>
+                    </div> -->
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="form-group" *ngIf='departments && selectedEmp'>
-                <label for="inputAddress">Department</label>
-                <select class="form-control" disabled [(ngModel)]='selectedEmp.department' name="department">
-                    <option *ngFor="let c of departments.results" [ngValue]="c.id">{{c.department_name}}</option>
-                </select>
+              <label for="inputAddress">Department</label>
+              <select class="form-control" disabled [(ngModel)]='selectedEmp.department' name="department">
+                <option *ngFor="let c of departments.results" [ngValue]="c.id">{{c.department_name}}</option>
+              </select>
             </div>
             <div class="form-group">
-                <label for="inputAddress">Purpose</label>
-                <input type="text" required class="form-control" id="inputAdress" name="purpose" [(ngModel)]="purpose">
+              <label for="inputAddress">Purpose</label>
+              <input type="text" required class="form-control" id="inputAdress" name="purpose" [(ngModel)]="purpose">
             </div>
-            
-            <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="myform.form.valid && onSubmit(myform)">Sign in</button>
+
+            <button type="submit" class="btn btn-primary" data-dismiss="modal"
+              (click)="myform.form.valid && onSubmit(myform)">Create</button>
           </form>
         </div>
       </div>
