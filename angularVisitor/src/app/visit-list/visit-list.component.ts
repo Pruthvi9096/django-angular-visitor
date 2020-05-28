@@ -53,9 +53,6 @@ export class VisitListComponent implements OnInit {
     this.getEmployeeData(this.employeeUrl);
     this.getDepartmentData(this.departmentUrl);
     this.resetForm();
-    this.datasource.filterPredicate = (data: any, filter: string) => {
-      return data.visitor_name.name == filter;
-    };
   }
 
   getVisitData(url) {
@@ -171,5 +168,18 @@ export class VisitListComponent implements OnInit {
       return textToSearch.indexOf(filter) !== -1;
     };
 
+  }
+
+  checkIn(visit) {
+    console.log(visit);
+    const date = new Date().toISOString();
+    visit.checkIn = date;
+    console.log(visit)
+    this.service.updateVisit(`${this.baseUrl}/${visit.id}`, visit).subscribe(respose =>{
+      console.log(respose);
+    },
+    error => {
+      console.log(error);
+    });
   }
 }

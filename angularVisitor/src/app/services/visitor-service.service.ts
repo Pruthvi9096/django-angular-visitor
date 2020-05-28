@@ -31,5 +31,9 @@ export class VisitorServiceService {
   createVisit(url: string , data: any) {
     return this.http.post(url, data);
   }
+
+  updateVisit(url: string, data: any) {
+    return this.http.put(url, data);
+  }
 }
 
