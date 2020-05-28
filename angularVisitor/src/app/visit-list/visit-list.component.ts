@@ -43,15 +43,19 @@ export class VisitListComponent implements OnInit {
   pageIndex = 0;
   pageSize = 5;
   length = 100;
+  filterValue: any;
 
   constructor(private service: VisitorServiceService, private router: Router) { }
   @ViewChild(MatPaginator) paginator: MatPaginator;
   ngOnInit(): void {
-    this.getVisitData(`${this.baseUrl}/?page=${this.pageIndex + 1}`);
+    this.getVisitData(this.baseUrl);
     this.getVisitorData(this.visitorUrl);
     this.getEmployeeData(this.employeeUrl);
     this.getDepartmentData(this.departmentUrl);
     this.resetForm();
+    this.datasource.filterPredicate = (data: any, filter: string) => {
+      return data.visitor_name.name == filter;
+     };
   }
 
   getVisitData(url) {
@@ -64,6 +68,9 @@ export class VisitListComponent implements OnInit {
         this.datasource.pageSize = this.pageSize;
         this.datasource.pageIndex = this.pageIndex;
       });
+      // this.datasource.data.visitor_name.forEach(element => {
+      //   element.toString();
+      // });
     },
     error => {
       console.log(error);
@@ -143,5 +150,22 @@ export class VisitListComponent implements OnInit {
   }
   getPreviousPageData(previousPage){
     this.getVisitData(previousPage);
+  }
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim();
+    filterValue = filterValue.toLowerCase();
+    this.datasource.filter = filterValue;
+  }
+  setupFilter() {
+
+    this.datasource.filterPredicate = (d: any, filter: string) => {
+      const textToSearch = JSON.stringify({
+        visitor_name: d.visitor_name.name.toLowerCase(),
+        visit_to: d.visit_to.name.toLowerCase(),
+        department: d.department.toLowerCase(),
+        purpose: d.purpose.toLowerCase()});
+      return textToSearch.indexOf(filter) !== -1;
+    };
+
   }
 }

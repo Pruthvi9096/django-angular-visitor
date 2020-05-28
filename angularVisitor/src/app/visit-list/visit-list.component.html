@@ -7,14 +7,27 @@
                 [pageSizeOptions]="[5, 10, 25, 100]"
                 (page)="pageEvent = getServerData($event)"
                 >
- </md-paginator> -->/
- <button *ngIf="result.previous" mat-fab color="primary" (click)="getPreviousPageData(result.previous)" aria-label="Example icon button with a delete icon">
-  <mat-icon>arrow_back_ios</mat-icon>
-</button>
- <button *ngIf="result.next" mat-fab color="primary" (click)="getNextPageData(result.next)" aria-label="Example icon button with a delete icon">
-  <mat-icon>arrow_forward_ios</mat-icon>
-</button>
- <mat-paginator [pageSizeOptions]="[5, 10, 15]"></mat-paginator>
+ </md-paginator> -->
+ <div class="row">
+   <div class="col-md-4">
+     <mat-form-field class="ml-3"> 
+       <input matInput (keyup)="applyFilter($event.target.value)" (focus)="setupFilter()" placeholder="Filter">
+      </mat-form-field>
+    </div>
+    <div class="col-md-3">
+      <button *ngIf="result.previous" mat-fab class="mx-2" color="primary" (click)="getPreviousPageData(result.previous)" aria-label="Example icon button with a delete icon">
+        <mat-icon>arrow_back_ios</mat-icon>
+      </button>
+      <button *ngIf="result.next" mat-fab class="mx-2" color="primary" (click)="getNextPageData(result.next)" aria-label="Example icon button with a delete icon">
+        <mat-icon>arrow_forward_ios</mat-icon>
+      </button>
+   </div>
+   <div class="col-md-5">
+     <mat-paginator [pageSizeOptions]="[5, 10, 15]">
+    </mat-paginator>
+   </div>
+ </div>
+
     <mat-table #table [dataSource]="datasource" *ngIf="result.results">
 
       <ng-container matColumnDef="visitor_name">
